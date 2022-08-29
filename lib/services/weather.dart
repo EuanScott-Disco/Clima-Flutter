@@ -1,4 +1,25 @@
+import '../models/weather_data.dart';
+import 'location.dart';
+import 'networking.dart';
+
 class WeatherModel {
+  Future<WeatherData> getLocationWeather() async {
+    Location location = Location();
+    await location.getCurrentLocation();
+
+    var url = NetworkHelper.getLocationUri(
+      latitude: location.longitude.toStringAsFixed(7),
+      longitude: location.longitude.toStringAsFixed(7),
+    );
+
+    return await NetworkHelper.getData(url: url);
+  }
+
+  Future<WeatherData> getCityWeather({String cityName}) async {
+    var url = NetworkHelper.getCityUri(cityName: cityName);
+    return await NetworkHelper.getData(url: url);
+  }
+
   String getWeatherIcon(int condition) {
     if (condition < 300) {
       return '🌩';
